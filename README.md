@@ -11,8 +11,10 @@ A simple command-line todo app built with Rust. Tasks are saved locally in a JSO
 - Persistent local storage (JSON)
 
 ## Dependencies
-- [`serde`](https://crates.io/crates/serde) – For JSON serialization and deserialization
-- [`chrono`](https://crates.io/crates/chrono) – For handling date and time
+- [`clap`](https://crates.io/crates/clap) - For command-line argument parsing
+- [`serde`](https://crates.io/crates/serde) - For JSON serialization and deserialization
+- [`serde_json`](https://crates.io/crates/serde_json) – For reading and writing JSON files
+- [`chrono`](https://crates.io/crates/chrono) - For handling date and time
 
 ## How to Run
 1. Clone the repo:
@@ -39,6 +41,6 @@ All tasks are saved in a local file called `tasks.json` in the project directory
     1. [✔] Buy milk
     Created: Aug 06, 2025 at 14:02 , Modified: Aug 06, 2025 at 14:03
 
-## Licence
+## License
 
 This project is licensed under the [MIT License](LICENSE).

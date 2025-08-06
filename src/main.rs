@@ -1,7 +1,12 @@
+mod cli;
 mod commands;
 mod storage;
 mod task;
 
+use clap::Parser;
+use cli::Cli;
+
 fn main() {
-    commands::run();
+    let cli = Cli::parse();
+    commands::run(cli);
 }
