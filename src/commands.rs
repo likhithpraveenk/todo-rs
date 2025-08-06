@@ -7,10 +7,12 @@ pub fn run(cli: Cli) {
     let mut tasks: Vec<Task> = match load_tasks() {
         Ok(t) => t,
         Err(e) => {
-            eprintln!("Error: Failed to load tasks: {}", e);
+            eprintln!("Failed to load tasks: {}", e);
             Vec::new()
         }
     };
+
+    let mut show_tasks = false;
 
     match cli.command {
         Commands::Add { text } => {
@@ -29,55 +31,71 @@ pub fn run(cli: Cli) {
             };
             tasks.push(task);
             match save_tasks(&tasks) {
-                Ok(_) => println!("Success: Added Task: {text}"),
-                Err(e) => eprintln!("Error: Couldn't add the task: {e}"),
+                Ok(_) => println!("Added Task: {text}"),
+                Err(e) => eprintln!("Couldn't add the task: {e}"),
             };
+            show_tasks = true;
         }
         Commands::List => {
             if tasks.is_empty() {
                 println!("Warning: No Tasks found!");
             } else {
                 println!("Tasks:");
-                for task in tasks {
+                for task in tasks.iter() {
                     println!("{task}");
                 }
             }
         }
-        Commands::Done { id } => match tasks.iter_mut().find(|task| task.id == id) {
-            Some(task) => {
-                if task.done {
-                    println!("Warning: Task {id} is already marked as done")
-                } else {
-                    task.done = true;
-                    task.modified_at = Local::now();
-                    let display_task = task.clone();
-                    match save_tasks(&tasks) {
-                        Ok(_) => {
-                            println!("Success: Marked task {id} as done");
-                            println!("{display_task}");
-                        }
+        Commands::Done { id } => {
+            match tasks.iter_mut().find(|task| task.id == id) {
+                Some(task) => {
+                    if task.done {
+                        println!("Warning: Task {id} is already marked as done")
+                    } else {
+                        task.done = true;
+                        task.modified_at = Local::now();
+                        let display_task = task.clone();
+                        match save_tasks(&tasks) {
+                            Ok(_) => {
+                                println!("Marked task {id} as done");
+                                println!("{display_task}");
+                            }
 
-                        Err(e) => eprintln!("Error: Failed to save task\n {e}"),
+                            Err(e) => eprintln!("Failed to save task\n {e}"),
+                        }
                     }
                 }
-            }
-            None => {
-                eprintln!("Error: No task found with ID: {id}");
-            }
-        },
+                None => {
+                    eprintln!("No task found with ID: {id}");
+                }
+            };
+        }
         Commands::Delete { id } => {
             if let Some(pos) = tasks.iter().position(|task| task.id == id) {
                 let deleted_task = tasks.remove(pos);
                 match save_tasks(&tasks) {
                     Ok(_) => {
-                        println!("Success: Deleted task {id}");
+                        println!("Deleted task {id}");
                         println!("{deleted_task}");
                     }
-                    Err(e) => eprintln!("Error: Failed to delete task\n {e}"),
+                    Err(e) => eprintln!("Failed to delete task\n {e}"),
                 }
             } else {
-                eprintln!("Error: No task found with ID: {id}")
+                eprintln!("No task found with ID: {id}")
+            }
+            show_tasks = true;
+        }
+    }
+
+    if show_tasks {
+        println!("\nCurrent Tasks:");
+        if tasks.is_empty() {
+            println!("(no tasks found)");
+        } else {
+            for task in tasks.iter() {
+                println!("{task}");
             }
         }
     }
+    println!();
 }

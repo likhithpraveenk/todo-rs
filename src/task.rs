@@ -15,9 +15,9 @@ pub struct Task {
 impl fmt::Display for Task {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let status = if self.done {
-            "✔".green()
+            "✔".green().bold()
         } else {
-            "•".red()
+            "•".red().bold()
         };
         let id = format!("{}.", self.id).bold().blue();
         let text = if self.done {
@@ -35,10 +35,10 @@ impl fmt::Display for Task {
             id,
             status,
             text,
-            "Created  :".bright_black(),
-            created.bright_white(),
-            "Modified :".bright_black(),
-            modifed.bright_white(),
+            "Created  :".dimmed(),
+            created,
+            "Modified :".dimmed(),
+            modifed,
         )
     }
 }

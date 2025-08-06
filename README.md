@@ -1,14 +1,13 @@
 # todo-rs
 
-## Project Description
-A simple command-line todo app built with Rust. Tasks are saved locally in a JSON file and can be added, listed, marked as done, or deleted via the CLI.
+A simple command-line todo app built with Rust. Tasks are saved in a temporary JSON file (`tasks.json`) within the system's temp directory and can be added, listed, marked as done, or deleted via the CLI.
 
 ## Features
 - Add tasks via CLI
 - List all tasks
 - Mark tasks as done
 - Delete tasks
-- Persistent local storage (JSON)
+- local storage (JSON)
 
 ## Dependencies
 - [`clap`](https://crates.io/crates/clap) - For command-line argument parsing
@@ -23,24 +22,40 @@ A simple command-line todo app built with Rust. Tasks are saved locally in a JSO
    git clone https://github.com/likhithpraveenk/todo-rs
    cd todo-rs
 
-2. Build the project:
+
+2. Use the CLI:
+    ```
+    cargo run
+
+- Available commands: 
+    ```
+    > add <text>
+    > list
+    > done <ID>
+    > delete <ID>
+    > exit
+
+
+3. Build the project and run it:
    ```bash
    cargo build --release
+   ./target/release/todo-rs
 
-3. Use the CLI:
-    ```bash
-    ./target/release/todo-rs add "Buy milk"
-    ./target/release/todo-rs list
-    ./target/release/todo-rs done 1
-    ./target/release/todo-rs delete 1
-
-## Data Storage
-All tasks are saved in a local file called `tasks.json` in the project directory.
 
 ## Example Output
-    Tasks:
-    1. [✔] Buy milk
-    Created: Aug 06, 2025 at 14:02 , Modified: Aug 06, 2025 at 14:03
+    > add Buy Milk
+    Added Task: Buy Milk
+
+    Current Tasks:
+    1. [•] Buy Milk
+    Created  : Aug 05, 2025 at 11:24
+    Modified : Aug 05, 2025 at 11:24
+
+    > done 1
+    Marked task 1 as done
+    1. [✔] Buy Milk
+    Created  : Aug 05, 2025 at 11:24
+    Modified : Aug 06, 2025 at 20:53
 
 ## License
 
