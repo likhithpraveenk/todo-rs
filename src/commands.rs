@@ -39,13 +39,7 @@ pub fn run(cli: Cli) {
             } else {
                 println!("Tasks:");
                 for task in tasks {
-                    let status = if task.done { "✔" } else { " " };
-                    println!("{}. [{}] {}", task.id, status, task.text);
-                    println!(
-                        "Created: {} , Modified: {}",
-                        task.created_at.format("%b %d, %Y at %H:%M"),
-                        task.modified_at.format("%b %d, %Y at %H:%M")
-                    );
+                    println!("{task}");
                 }
             }
         }
@@ -56,8 +50,13 @@ pub fn run(cli: Cli) {
                 } else {
                     task.done = true;
                     task.modified_at = Local::now();
+                    let display_task = task.clone();
                     match save_tasks(&tasks) {
-                        Ok(_) => println!("Success: Marked task {id} as done"),
+                        Ok(_) => {
+                            println!("Success: Marked task {id} as done");
+                            println!("{display_task}");
+                        }
+
                         Err(e) => eprintln!("Error: Failed to save task\n {e}"),
                     }
                 }
@@ -67,12 +66,13 @@ pub fn run(cli: Cli) {
             }
         },
         Commands::Delete { id } => {
-            let original_len = tasks.len();
-            tasks.retain(|task| task.id != id);
-
-            if tasks.len() < original_len {
+            if let Some(pos) = tasks.iter().position(|task| task.id == id) {
+                let deleted_task = tasks.remove(pos);
                 match save_tasks(&tasks) {
-                    Ok(_) => println!("Success: Deleted task {id}"),
+                    Ok(_) => {
+                        println!("Success: Deleted task {id}");
+                        println!("{deleted_task}");
+                    }
                     Err(e) => eprintln!("Error: Failed to delete task\n {e}"),
                 }
             } else {

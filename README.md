@@ -15,6 +15,7 @@ A simple command-line todo app built with Rust. Tasks are saved locally in a JSO
 - [`serde`](https://crates.io/crates/serde) - For JSON serialization and deserialization
 - [`serde_json`](https://crates.io/crates/serde_json) – For reading and writing JSON files
 - [`chrono`](https://crates.io/crates/chrono) - For handling date and time
+- [`colored`](https://crates.io/crates/colored) - For colored and styled terminal output
 
 ## How to Run
 1. Clone the repo:
